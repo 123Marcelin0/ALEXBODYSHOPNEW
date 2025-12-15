@@ -20,14 +20,14 @@ export default function Hero({ onStartQuiz }) {
             <div className="container grid" style={{ gridTemplateColumns: '1.2fr 0.8fr', alignItems: 'center', gap: '4rem' }}>
 
                 {/* Content */}
-                <div className="flex flex-col animate-fade-in" style={{ gap: '2rem', animationDelay: '0.1s' }}>
-                    <div className="flex items-center" style={{ gap: '1rem' }}>
+                <div className="hero-content flex flex-col animate-fade-in" style={{ gap: '2rem', animationDelay: '0.1s' }}>
+                    <div className="location-badge flex items-center" style={{ gap: '1rem' }}>
                         <span className="badge">Lingen (Ems)</span>
                         <span style={{ height: '1px', width: '50px', backgroundColor: 'var(--color-border)' }}></span>
                         <span style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Local Supplement Store</span>
                     </div>
 
-                    <h1 style={{ fontSize: 'clamp(3rem, 5vw, 5.5rem)', lineHeight: 0.95, letterSpacing: '-0.02em' }}>
+                    <h1 className="hero-title" style={{ fontSize: 'clamp(2.5rem, 6vw, 5.5rem)', lineHeight: 0.95, letterSpacing: '-0.02em' }}>
                         DEIN ZIEL<br />
                         IST <span className="text-accent" style={{
                             display: 'inline-block',
@@ -41,12 +41,12 @@ export default function Hero({ onStartQuiz }) {
                         </span>
                     </h1>
 
-                    <p style={{ fontSize: '1.25rem', color: 'var(--color-text-muted)', maxWidth: '550px', lineHeight: 1.6 }}>
+                    <p className="hero-text" style={{ fontSize: '1.25rem', color: 'var(--color-text-muted)', maxWidth: '550px', lineHeight: 1.6 }}>
                         Top-Produkte für High-Performer. Keine Wartezeit. <br />
                         Checke den Bestand online, reserviere per WhatsApp und hol es dir direkt ab.
                     </p>
 
-                    <div className="flex" style={{ gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+                    <div className="hero-buttons flex" style={{ gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
                         <button onClick={onStartQuiz} className="btn" style={{ minWidth: '200px' }}>
                             <Zap size={20} />
                             Goal-Getter Quiz
@@ -56,7 +56,7 @@ export default function Hero({ onStartQuiz }) {
                         </button>
                     </div>
 
-                    <div className="flex items-center" style={{ gap: '2rem', marginTop: '2rem', borderTop: '1px solid var(--color-border)', paddingTop: '2rem' }}>
+                    <div className="hero-stats flex items-center" style={{ gap: '2rem', marginTop: '2rem', borderTop: '1px solid var(--color-border)', paddingTop: '2rem' }}>
                         <div>
                             <h4 style={{ fontSize: '1.5rem', marginBottom: '0.2rem', color: 'var(--color-accent)' }}>100%</h4>
                             <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>Original Ware</span>
@@ -118,6 +118,36 @@ export default function Hero({ onStartQuiz }) {
         @media (max-width: 968px) {
           .hero-visual { display: none !important; }
           .grid { grid-template-columns: 1fr !important; }
+          
+          /* Mobile Centering Overrides */
+          .hero-content {
+             align-items: center !important;
+             text-align: center !important;
+             padding: 2rem 0;
+          }
+          
+          .location-badge {
+             justify-content: center !important;
+          }
+          
+          .hero-buttons {
+             justify-content: center !important;
+             width: 100%;
+          }
+          
+          .hero-stats {
+             justify-content: center !important;
+             width: 100%;
+             gap: 1.5rem !important;
+          }
+
+          .hero-title {
+              font-size: 3rem !important; /* Slightly smaller for mobile readability */
+          }
+          
+          .hero-text {
+              margin: 0 auto; /* Enhance readability width */
+          }
         }
       `}</style>
         </section>
