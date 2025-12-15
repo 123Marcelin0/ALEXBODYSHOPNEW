@@ -9,32 +9,46 @@ const NAV_ITEMS = [
 ];
 
 export default function Navbar() {
-  const [activeId, setActiveId] = useState('hero');
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const navRefs = React.useRef({});
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 150; // Offset for sticky header
+      const scrollPosition = window.scrollY + 200; // Increased offset for better triggering
 
+      let currentId = 'hero';
       for (const item of NAV_ITEMS) {
         const element = document.getElementById(item.id);
         if (element) {
           const { offsetTop, offsetHeight } = element;
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveId(item.id);
+            currentId = item.id;
           }
         }
       }
+      setActiveId(currentId);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const activeLink = navRefs.current[activeId];
+    if (activeLink) {
+      setIndicatorStyle({
+        left: activeLink.offsetLeft,
+        width: activeLink.offsetWidth,
+        opacity: 1
+      });
+    }
+  }, [activeId]);
+
   const handleClick = (e, id) => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      const offset = 100; // Header height approx
+      const offset = 100;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -69,6 +83,7 @@ export default function Navbar() {
           {NAV_ITEMS.map((item) => (
             <a
               key={item.id}
+              ref={el => navRefs.current[item.id] = el}
               href={`#${item.id}`}
               onClick={(e) => handleClick(e, item.id)}
               style={{
@@ -83,19 +98,21 @@ export default function Navbar() {
               }}
             >
               {item.label}
-              {activeId === item.id && (
-                <span style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '2px',
-                  backgroundColor: 'var(--color-accent)',
-                  boxShadow: '0 0 10px var(--color-accent)'
-                }}></span>
-              )}
             </a>
           ))}
+          {/* Sliding Underline */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            height: '2px',
+            backgroundColor: 'var(--color-accent)',
+            boxShadow: '0 0 10px var(--color-accent)',
+            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)', // Smooth sliding transition
+            left: indicatorStyle.left,
+            width: indicatorStyle.width,
+            opacity: indicatorStyle.opacity,
+            pointerEvents: 'none'
+          }}></div>
         </div>
 
         {/* Right Action Icons */}
