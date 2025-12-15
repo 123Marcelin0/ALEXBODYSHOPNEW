@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Instagram, Zap } from 'lucide-react';
+import { Instagram, Zap, Menu, X } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'Home', id: 'hero' },
@@ -11,6 +11,7 @@ const NAV_ITEMS = [
 export default function Navbar() {
   const [activeId, setActiveId] = useState('hero');
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navRefs = React.useRef({});
 
   useEffect(() => {
@@ -35,18 +36,31 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const activeLink = navRefs.current[activeId];
-    if (activeLink) {
-      setIndicatorStyle({
-        left: activeLink.offsetLeft,
-        width: activeLink.offsetWidth,
-        opacity: 1
-      });
+    // Only update slider on desktop when menu is closed or resize logic could vary
+    if (!mobileMenuOpen) {
+      const activeLink = navRefs.current[activeId];
+      if (activeLink) {
+        setIndicatorStyle({
+          left: activeLink.offsetLeft,
+          width: activeLink.offsetWidth,
+          opacity: 1
+        });
+      }
     }
-  }, [activeId]);
+  }, [activeId, mobileMenuOpen]);
+
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [mobileMenuOpen]);
 
   const handleClick = (e, id) => {
     e.preventDefault();
+    setMobileMenuOpen(false); // Close mobile menu if open
     const element = document.getElementById(id);
     if (element) {
       const offset = 100;
@@ -75,11 +89,11 @@ export default function Navbar() {
     }}>
       <div className="container flex justify-between items-center navbar-container" style={{ position: 'relative' }}>
         {/* Logo */}
-        <div className="navbar-logo" style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.1em', fontFamily: 'var(--font-heading)', zIndex: 10 }}>
+        <div className="navbar-logo" style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.1em', fontFamily: 'var(--font-heading)', zIndex: 110 }}>
           ALEXX <span className="text-accent">BODYSHOP</span>
         </div>
 
-        {/* Navigation Links - Desktop Only */}
+        {/* Desktop Nav Links */}
         <div className="nav-links flex items-center" style={{ gap: '2rem', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
           {NAV_ITEMS.map((item) => (
             <a
@@ -117,8 +131,8 @@ export default function Navbar() {
         </div>
 
         {/* Right Action Icons */}
-        <div className="flex items-center navbar-actions" style={{ gap: '2rem' }}>
-          {/* Status Indicator - Hide on very small screens to save space if needed, but keeping for now */}
+        <div className="flex items-center navbar-actions" style={{ gap: '1rem' }}>
+          {/* Status Indicator */}
           <div className="flex items-center status-indicator" style={{ gap: '0.75rem' }}>
             <div style={{ position: 'relative', display: 'flex' }}>
               <div style={{
@@ -155,6 +169,70 @@ export default function Navbar() {
             }}>
             <Instagram size={20} />
           </a>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'white',
+              padding: '0.5rem',
+              cursor: 'pointer',
+              display: 'none', // Hidden on desktop
+              zIndex: 110
+            }}
+          >
+            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <div
+        className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: 'var(--color-bg)',
+          zIndex: 100,
+          padding: '6rem 2rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '2rem',
+          transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+          transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)',
+        }}
+      >
+        {NAV_ITEMS.map((item, index) => (
+          <a
+            key={item.id}
+            href={`#${item.id}`}
+            onClick={(e) => handleClick(e, item.id)}
+            style={{
+              fontSize: '2rem',
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 700,
+              color: activeId === item.id ? 'var(--color-accent)' : 'white',
+              textTransform: 'uppercase',
+              opacity: mobileMenuOpen ? 1 : 0,
+              transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(20px)',
+              transition: `all 0.4s ease ${index * 0.1}s`
+            }}
+          >
+            {item.label}
+          </a>
+        ))}
+
+        <div style={{ marginTop: 'auto', borderTop: '1px solid var(--color-border)', paddingTop: '2rem' }}>
+          <p className="text-muted" style={{ fontSize: '0.9rem' }}>
+            Lingen (Ems)<br />
+            Local Pickup Only
+          </p>
         </div>
       </div>
 
@@ -170,22 +248,23 @@ export default function Navbar() {
           box-shadow: 0 4px 12px rgba(204, 255, 0, 0.2);
         }
         
-        /* Hide nav links on mobile/tablet */
         @media (max-width: 968px) {
             .nav-links { display: none !important; }
-            .status-indicator { display: none !important; } /* Simplify header on mobile */
+            .status-indicator { display: none !important; }
+            .menu-toggle { display: block !important; }
             
+            /* Revised Mobile Layout */
             .navbar-container {
-                justify-content: center !important;
+                justify-content: space-between !important;
             }
             .navbar-logo {
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
+                position: static !important;
+                transform: none !important;
+                font-size: 1.2rem !important; /* Smaller logo as requested */
             }
             .navbar-actions {
-                position: absolute;
-                right: 0;
+                position: static !important;
+                gap: 0.5rem !important;
             }
         }
       `}</style>
