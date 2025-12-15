@@ -28,11 +28,11 @@ function App() {
       <Navbar />
       <main>
         <Hero onStartQuiz={scrollToQuiz} />
-        <GoalGetterQuiz />
         <div style={{ padding: '2rem 0' }}></div>
         <HybridCatalog />
         <div style={{ padding: '2rem 0' }}></div>
         <TransformationBlueprints />
+        <GoalGetterQuiz />
         <div style={{ padding: '2rem 0' }}></div>
         <ReviewsTicker />
       </main>

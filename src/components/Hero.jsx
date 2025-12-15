@@ -51,7 +51,11 @@ export default function Hero({ onStartQuiz }) {
                             <Zap size={20} />
                             Goal-Getter Quiz
                         </button>
-                        <button className="btn btn-outline" style={{ minWidth: '180px' }}>
+                        <button
+                            className="btn btn-outline"
+                            style={{ minWidth: '180px' }}
+                            onClick={() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })}
+                        >
                             Katalog ansehen
                         </button>
                     </div>
