@@ -3,9 +3,9 @@ import { Instagram, Zap } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'Home', id: 'hero' },
-  { label: 'Beratung', id: 'quiz' },
   { label: 'Shop', id: 'catalog' },
   { label: 'Pläne', id: 'blueprints' },
+  { label: 'Beratung', id: 'quiz' },
 ];
 
 export default function Navbar() {
@@ -73,9 +73,9 @@ export default function Navbar() {
       backdropFilter: 'blur(10px)',
       zIndex: 100
     }}>
-      <div className="container flex justify-between items-center">
+      <div className="container flex justify-between items-center navbar-container" style={{ position: 'relative' }}>
         {/* Logo */}
-        <div style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.1em', fontFamily: 'var(--font-heading)' }}>
+        <div className="navbar-logo" style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.1em', fontFamily: 'var(--font-heading)', zIndex: 10 }}>
           ALEXX <span className="text-accent">BODYSHOP</span>
         </div>
 
@@ -117,7 +117,7 @@ export default function Navbar() {
         </div>
 
         {/* Right Action Icons */}
-        <div className="flex items-center" style={{ gap: '2rem' }}>
+        <div className="flex items-center navbar-actions" style={{ gap: '2rem' }}>
           {/* Status Indicator - Hide on very small screens to save space if needed, but keeping for now */}
           <div className="flex items-center status-indicator" style={{ gap: '0.75rem' }}>
             <div style={{ position: 'relative', display: 'flex' }}>
@@ -174,6 +174,19 @@ export default function Navbar() {
         @media (max-width: 968px) {
             .nav-links { display: none !important; }
             .status-indicator { display: none !important; } /* Simplify header on mobile */
+            
+            .navbar-container {
+                justify-content: center !important;
+            }
+            .navbar-logo {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .navbar-actions {
+                position: absolute;
+                right: 0;
+            }
         }
       `}</style>
     </nav>
