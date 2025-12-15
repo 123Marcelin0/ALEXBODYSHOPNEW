@@ -66,10 +66,6 @@ export default function Hero({ onStartQuiz }) {
                             <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>Original Ware</span>
                         </div>
                         <div>
-                            <h4 style={{ fontSize: '1.5rem', marginBottom: '0.2rem', color: 'var(--color-accent)' }}>0€</h4>
-                            <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>Versandkosten</span>
-                        </div>
-                        <div>
                             <h4 style={{ fontSize: '1.5rem', marginBottom: '0.2rem', color: 'var(--color-accent)' }}>24/7</h4>
                             <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>Support</span>
                         </div>
