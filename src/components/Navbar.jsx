@@ -9,6 +9,7 @@ const NAV_ITEMS = [
 ];
 
 export default function Navbar() {
+  const [activeId, setActiveId] = useState('hero');
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
   const navRefs = React.useRef({});
 
