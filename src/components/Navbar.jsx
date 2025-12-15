@@ -1,11 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Instagram, Zap } from 'lucide-react';
 
+const NAV_ITEMS = [
+  { label: 'Home', id: 'hero' },
+  { label: 'Beratung', id: 'quiz' },
+  { label: 'Shop', id: 'catalog' },
+  { label: 'Pläne', id: 'blueprints' },
+];
+
 export default function Navbar() {
+  const [activeId, setActiveId] = useState('hero');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 150; // Offset for sticky header
+
+      for (const item of NAV_ITEMS) {
+        const element = document.getElementById(item.id);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveId(item.id);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleClick = (e, id) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 100; // Header height approx
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+      setActiveId(id);
+    }
+  };
+
   return (
     <nav style={{
       borderBottom: '1px solid var(--color-border)',
-      padding: '1.5rem 0',
+      padding: '1rem 0',
       position: 'sticky',
       top: 0,
       backgroundColor: 'rgba(10, 10, 10, 0.95)',
@@ -13,13 +59,49 @@ export default function Navbar() {
       zIndex: 100
     }}>
       <div className="container flex justify-between items-center">
+        {/* Logo */}
         <div style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.1em', fontFamily: 'var(--font-heading)' }}>
           ALEXX <span className="text-accent">BODYSHOP</span>
         </div>
 
+        {/* Navigation Links - Desktop Only */}
+        <div className="nav-links flex items-center" style={{ gap: '2rem', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              onClick={(e) => handleClick(e, item.id)}
+              style={{
+                fontSize: '0.9rem',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                color: activeId === item.id ? 'white' : 'var(--color-text-muted)',
+                position: 'relative',
+                transition: 'color 0.3s ease',
+                padding: '0.5rem 0',
+                cursor: 'pointer'
+              }}
+            >
+              {item.label}
+              {activeId === item.id && (
+                <span style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '2px',
+                  backgroundColor: 'var(--color-accent)',
+                  boxShadow: '0 0 10px var(--color-accent)'
+                }}></span>
+              )}
+            </a>
+          ))}
+        </div>
+
+        {/* Right Action Icons */}
         <div className="flex items-center" style={{ gap: '2rem' }}>
-          {/* Status Indicator */}
-          <div className="flex items-center" style={{ gap: '0.75rem' }}>
+          {/* Status Indicator - Hide on very small screens to save space if needed, but keeping for now */}
+          <div className="flex items-center status-indicator" style={{ gap: '0.75rem' }}>
             <div style={{ position: 'relative', display: 'flex' }}>
               <div style={{
                 width: 10,
@@ -68,6 +150,12 @@ export default function Navbar() {
           background-color: rgba(204, 255, 0, 0.1) !important;
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(204, 255, 0, 0.2);
+        }
+        
+        /* Hide nav links on mobile/tablet */
+        @media (max-width: 968px) {
+            .nav-links { display: none !important; }
+            .status-indicator { display: none !important; } /* Simplify header on mobile */
         }
       `}</style>
     </nav>

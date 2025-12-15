@@ -3,7 +3,7 @@ import { ArrowRight, Zap } from 'lucide-react';
 
 export default function Hero({ onStartQuiz }) {
     return (
-        <section className="section" style={{ minHeight: '85vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+        <section id="hero" className="section" style={{ minHeight: '85vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
 
             {/* Background Elements */}
             <div style={{
